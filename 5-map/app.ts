@@ -1,7 +1,7 @@
 class WeatherMap {
-  buckets: Array<{ key: string; value: number }[]>;
-  bucketLimit: number;
-  collisionCount: number;
+  private buckets: Array<{ key: string; value: number }[]>;
+  private bucketLimit: number;
+  private collisionCount: number;
 
   constructor(initialLimit = 26) {
     this.buckets = Array.from({ length: initialLimit }, () => []);
@@ -36,11 +36,11 @@ class WeatherMap {
     return existingItem ? existingItem.value : undefined;
   }
 
-  hashFunc(key: string): number {
+  private hashFunc(key: string): number {
     return key.charCodeAt(0) - "A".charCodeAt(0);
   }
 
-  calculateIndex(key: string): number {
+  private calculateIndex(key: string): number {
     const firstChar = key.charAt(0).toUpperCase();
     return this.hashFunc(firstChar) % this.bucketLimit;
   }
