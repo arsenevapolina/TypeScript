@@ -4,13 +4,13 @@ class WeatherMap {
   private collisionCount: number;
 
   constructor(initialLimit = 26) {
-    this.buckets = Array.from({ length: initialLimit }, () => []);
+    this.buckets = new Array(initialLimit).fill(null).map(() => []);
     this.collisionCount = 0;
     this.bucketLimit = initialLimit;
   }
 
   set(key: string, value: number) {
-    const index = this.calculateIndex(key);
+    const index = this.getIndexForKey(key);
     const bucket = this.buckets[index];
 
     const existingItem = bucket.find(
@@ -18,22 +18,49 @@ class WeatherMap {
     );
     if (existingItem) {
       existingItem.value = value;
-    } else {
-      bucket.push({ key, value });
-      if (bucket.length > 1) {
-        this.collisionCount++;
-      }
+      return;
     }
-    return this;
+    bucket.push({ key, value });
+    if (bucket.length > 1) {
+      this.collisionCount += 1;
+    }
   }
 
   get(key: string) {
-    const index = this.calculateIndex(key);
+    const index = this.getIndexForKey(key);
     const bucket = this.buckets[index];
     const existingItem = bucket.find(
       (el) => el.key.toLowerCase() === key.toLowerCase()
     );
     return existingItem ? existingItem.value : undefined;
+  }
+
+  delete(key: string): boolean {
+    const index = this.getIndexForKey(key);
+    const bucket = this.buckets[index];
+    const entryIndex = bucket.findIndex(
+      (el) => el.key.toLowerCase() === key.toLowerCase()
+    );
+
+    if (entryIndex === -1) {
+      return false;
+    }
+
+    const hasCollisions = bucket.length > 1;
+    bucket.splice(entryIndex, 1);
+
+    if (bucket.length > 0 && hasCollisions) {
+      this.collisionCount--;
+    }
+
+    return true;
+  }
+
+  clear() {
+    this.buckets = Array(this.bucketLimit)
+      .fill(null)
+      .map(() => []);
+    this.collisionCount = 0;
   }
 
   private hashFunc(key: string): number {
@@ -45,27 +72,8 @@ class WeatherMap {
     return this.hashFunc(firstChar) % this.bucketLimit;
   }
 
-  delete(key: string): boolean {
-    const index = this.calculateIndex(key);
-    const bucket = this.buckets[index];
-    const entryIndex = bucket.findIndex(
-      (el) => el.key.toLowerCase() === key.toLowerCase()
-    );
-
-    if (entryIndex !== -1) {
-      const wasCollisions = bucket.length > 1;
-      bucket.splice(entryIndex, 1);
-      if (bucket.length > 0 && wasCollisions) {
-        this.collisionCount--;
-      }
-      return true;
-    }
-    return false;
-  }
-
-  clear() {
-    this.buckets = Array.from({ length: this.bucketLimit }, () => []);
-    this.collisionCount = 0;
+  private getIndexForKey(key: string): number {
+    return this.calculateIndex(key);
   }
 }
 
