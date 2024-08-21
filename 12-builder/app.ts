@@ -16,7 +16,7 @@ interface IRequest extends IManeRequest {
   method: RequestMethods;
 }
 
-class ReqBuilder {
+class RequestBuilder {
   private methods: RequestMethods[] = [];
   private urls: IManeRequest["url"][] = [];
   private body?: IManeRequest["body"] = {};
@@ -72,7 +72,7 @@ class ReqBuilder {
 }
 
 console.log(
-  new ReqBuilder()
+  new RequestBuilder()
     .addMethod(RequestMethods.Get)
     .addHeaders({
       Accept: "application/json",
