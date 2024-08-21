@@ -1,9 +1,9 @@
-interface IA {
+interface A {
   a: number;
   b: string;
 }
 
-interface IB {
+interface B {
   a: number;
   c: boolean;
 }
@@ -26,8 +26,8 @@ function difference<T extends object, Y extends object>(
   return result;
 }
 
-let a: IA = { a: 5, b: "" };
-let b: IB = { a: 10, c: true };
+let a: A = { a: 5, b: "" };
+let b: B = { a: 10, c: true };
 
 const result = difference(a, b);
 console.log(result);
