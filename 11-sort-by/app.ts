@@ -30,11 +30,11 @@ let users: User[] = [
   },
 ];
 
-users.sort(sortBy("name", "age"));
+users.sort(sortBy<User>("name", "age"));
 
-users.sort(sortBy("-id", "name"));
+users.sort(sortBy<User>("-id", "name"));
 
-users.sort(sortBy("age", "email.primary"));
+users.sort(sortBy<User>("age", "email.primary"));
 
 // test
 console.log(users.sort(sortBy("name", "age")));
