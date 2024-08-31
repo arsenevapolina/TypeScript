@@ -65,18 +65,22 @@ class TaskIterator implements IIterator<Task> {
     }
   }
 
-  current(): Task | undefined {
+  private getTaskAtPosition(): Task | undefined {
     return this.taskList.getTasks()[this.position];
+  }
+  
+  current(): Task | undefined {
+     return this.getTaskAtPosition();
   }
 
   next(): Task | undefined {
     this.position += 1;
-    return this.taskList.getTasks()[this.position];
+     return this.getTaskAtPosition();
   }
 
   prev(): Task | undefined {
     this.position -= 1;
-    return this.taskList.getTasks()[this.position];
+     return this.getTaskAtPosition();
   }
 
   index(): number {
