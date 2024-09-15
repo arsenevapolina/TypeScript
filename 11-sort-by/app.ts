@@ -37,4 +37,4 @@ users.sort(sortBy<User>("-id", "name"));
 users.sort(sortBy<User>("age", "email.primary"));
 
 // test
-console.log(users.sort(sortBy("name", "age")));
+console.log(users.sort(sortBy<User>("name", "age")));
